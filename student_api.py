@@ -96,7 +96,7 @@ def edit_or_delete_student(student_id):
         con.close()
         if n > 0:
             return make_response(jsonify({
-                'message': 'Update student successfully',
+                'message': 'Updated student successfully',
             }), 200)
         else:
             return make_response(jsonify({
@@ -121,4 +121,17 @@ def edit_or_delete_student(student_id):
     else:
         pass
 
-app.run(host='0.0.0.0')
+@app.route('/student/deleteall', methods=['DELETE'])
+def delete_all_student():
+    con = sqlite3.connect('student.sqlite3')
+    cur = con.cursor()
+    cur.execute("DELETE FROM tbl_student WHERE 1")
+    con.commit()
+    cur.close()
+    con.close()
+    return make_response(jsonify({
+        'message': 'Data has been cleared!',
+    }), 200)
+
+if __name__ == '__main__:
+    app.run()
